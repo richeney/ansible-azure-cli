@@ -1,2 +1,31 @@
 ---
-# tasks file for ansible-role-azure-cli
+# Install the Azure CLI
+# Based on <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt?view=azure-cli-latest>
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Get packages needed for the install process
+  apt:
+    name: "{{ apt_packages }}"
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Import the Microsoft signing key into apt
+  apt_key:
+    url: "{{ repo_key_url }}"
+    state: present
+
+- name: Add the Azure CLI software repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ansible_distribution_release}} main"
+    filename: "{{ azure_package_name }}"
+    state: present
+
+- name: Install Azure CLI
+  apt:
+    name: "{{ azure_package_name }}"
+    update_cache: yes
+
+...
