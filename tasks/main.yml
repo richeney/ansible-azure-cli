@@ -28,8 +28,7 @@
     name: "{{ azure_package_name }}"
     update_cache: yes
 
-- name: Wait until the apt lock file is removed
-  wait_for:
-    path: /var/lib/dpkg/lock
-    state: absent
+- name: Update all packages
+  apt:
+    upgrade: dist
 ...
