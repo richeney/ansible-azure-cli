@@ -1,6 +1,6 @@
 # Install Azure CLI
 
-Ansible role to install the Azure CLI for either Ubuntu 16.04 (xenial) and 18.04 (bionic).
+Ansible role to install the Azure CLI for either Ubuntu 16.04 (xenial), 18.04 (bionic) or 20.04 (focal).
 
 ## Installation
 
