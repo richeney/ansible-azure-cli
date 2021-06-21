@@ -2,14 +2,11 @@
 # Install the Azure CLI
 # Based on <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-apt?view=azure-cli-latest>
 
-- name: Update apt cache
-  apt:
-    update_cache: yes
-
 - name: Get packages needed for the install process
   apt:
     name: "{{ apt_packages }}"
     state: present
+    update_cache: yes
   when: ansible_os_family == 'Debian'
 
 - name: Import the Microsoft signing key into apt
