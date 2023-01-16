@@ -4,28 +4,32 @@
 
 - name: Get packages needed for the install process
   apt:
-    name: "{{ apt_packages }}"
+    name:
+    - aptitude
+    - curl
+    - apt-transport-https
+    - lsb-release
+    - gnupg
     state: present
     update_cache: yes
-  when: ansible_os_family == 'Debian'
 
-- name: Import the Microsoft signing key into apt
-  apt_key:
-    url: "{{ repo_key_url }}"
-    state: present
+- name: Add the Microsoft software repository
+  block:
+    - name: Download the Microsoft signing key
+      ansible.builtin.get_url:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        dest: /usr/share/keyrings/microsoft.asc
+        mode: '0644'
+        force: true
 
-- name: Add the Azure CLI software repository
-  apt_repository:
-    repo: "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ansible_distribution_release}} main"
-    filename: "{{ azure_package_name }}"
-    state: present
+    - name: Add the Microsoft software repository to /etc/apt/sources.list.d
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/azure-cli/ {{ansible_distribution_release}} main"
+        filename: hashicorp
+        state: present
 
 - name: Install Azure CLI
   apt:
-    name: "{{ azure_package_name }}"
+    name: azure-cli
     update_cache: yes
-
-- name: Update all packages
-  apt:
-    upgrade: dist
 ...
