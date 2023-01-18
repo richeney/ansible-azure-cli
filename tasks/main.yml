@@ -25,7 +25,7 @@
     - name: Add the Microsoft software repository to /etc/apt/sources.list.d
       ansible.builtin.apt_repository:
         repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/repos/azure-cli/ {{ansible_distribution_release}} main"
-        filename: hashicorp
+        filename: azure-cli
         state: present
 
 - name: Install Azure CLI
